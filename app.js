@@ -20,11 +20,21 @@ const createLog = async (info) => {
   const query = info.selectionText;
 
   const underscoreRegex = /(_)/gi;
-  const parenthesisJpgRegex = /(\()*(\))*(.jpg)*/gi;
+  const JpgRegex = /(.jpg)*/gi;
+  const whitespaceRegex = /(\s)/gi;
+
   const underscorePosition = query.search(underscoreRegex);
   let sanitizedQuery = "";
 
   if (
+    query[underscorePosition + 1] === "-" &&
+    query[underscorePosition - 1] === "-"
+  ) {
+    sanitizedQuery = query.replace(underscoreRegex, "");
+    sanitizedQuery =
+      sanitizedQuery.slice(0, underscorePosition - 1) +
+      sanitizedQuery.slice(underscorePosition);
+  } else if (
     query[underscorePosition + 1] === "-" ||
     query[underscorePosition - 1] === "-"
   ) {
@@ -32,7 +42,9 @@ const createLog = async (info) => {
   } else {
     sanitizedQuery = query.replace(underscoreRegex, "-");
   }
-  sanitizedQuery = sanitizedQuery.replace(parenthesisJpgRegex, "");
+
+  sanitizedQuery = sanitizedQuery.replace(JpgRegex, "");
+  sanitizedQuery = sanitizedQuery.replace(whitespaceRegex, "-");
 
   let res = await searchCascade(sanitizedQuery);
 
@@ -49,7 +61,38 @@ const createLog = async (info) => {
     `Found ${res.length} files matching %c${sanitizedQuery}`,
     `font-style: italic;`
   );
-  res.forEach((file) => {
+  res.forEach(async (file) => {
+    let details = await fetch(
+      `https://uncw.cascadecms.com/api/v1/read/file/_uncw.edu/${file.path.path}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+      }
+    );
+    const data = await details.json();
+
+    const name = data.asset.file.name;
+
+    if (name.includes("photo-slider")) {
+      console.log("👇Photo Slider👇");
+    } else if (name.includes("hero-interior-level4")) {
+      console.log("👇Hero Level 4👇");
+    } else if (name.includes("hero-level1")) {
+      console.log("👇Hero Level 1👇");
+    } else if (name.includes("image-card-set")) {
+      console.log("👇Image Card Set👇");
+    } else if (name.includes("background-image")) {
+      console.log("👇Background Image Feature👇");
+    } else if (name.includes("visual-story-gallery")) {
+      console.log("👇Visual Story Gallery👇");
+    } else if (name.includes("testimonial")) {
+      console.log("👇Testimonial👇");
+    } else {
+      console.log(`Didn't match a component: ${name}`);
+    }
+
     console.log(
       `https://uncw.cascadecms.com/entity/open.act?id=${file.id}&type=file`
     );
