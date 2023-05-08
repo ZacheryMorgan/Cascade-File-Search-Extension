@@ -1,0 +1,15 @@
+{
+  "name": "Cascade File Search",
+  "description": "Search for a file name in Cascade from selected text",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "app.js"
+  },
+  "permissions": ["storage", "activeTab", "contextMenus"],
+  "icons": {
+    "16": "./assets/icon16.png",
+    "32": "./assets/icon32.png",
+    "48": "./assets/icon64.png"
+  }
+}
