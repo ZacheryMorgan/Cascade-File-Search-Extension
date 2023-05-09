@@ -1,6 +1,11 @@
 // SET THIS VARIABLE TO YOUR CASCADE API KEY
 const apiKey = "";
 
+const headerOneStyling =
+  "background: #006666; padding: .6rem; color: white; border-radius: 7px; font-weight: bold";
+const headerTwoStyling =
+  "background: #003366; padding: .2rem; color: white; border-radius: 7px";
+
 // onRun Create Context
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Cascade File Search Extension Started ✅");
@@ -58,8 +63,8 @@ const createLog = async (info) => {
   }
 
   console.log(
-    `Found ${res.length} files matching %c${sanitizedQuery}`,
-    `font-style: italic;`
+    `%cFound ${res.length} files matching ${sanitizedQuery}`,
+    headerOneStyling
   );
   res.forEach(async (file) => {
     let details = await fetch(
@@ -74,23 +79,56 @@ const createLog = async (info) => {
     const data = await details.json();
 
     const name = data.asset.file.name;
-
+    //TODO
+    //IMPLEMENT ALL COMPONENTS
     if (name.includes("photo-slider")) {
-      console.log("👇Photo Slider👇");
+      console.log(
+        `%c👇 Photo Slider 👇  %c${name}`,
+        headerTwoStyling,
+        "font-style: italic"
+      );
     } else if (name.includes("hero-interior-level4")) {
-      console.log("👇Hero Level 4👇");
+      console.log(
+        `%c👇 Hero Level 4 👇 %c${name}`,
+        headerTwoStyling,
+        "font-style: italic"
+      );
     } else if (name.includes("hero-level1")) {
-      console.log("👇Hero Level 1👇");
+      console.log(
+        `%c👇 Hero Level 1 👇 %c${name}`,
+        headerTwoStyling,
+        "font-style: italic"
+      );
     } else if (name.includes("image-card-set")) {
-      console.log("👇Image Card Set👇");
+      console.log(
+        `%c👇 Image Card Set 👇 %c${name}`,
+        headerTwoStyling,
+        "font-style: italic"
+      );
     } else if (name.includes("background-image")) {
-      console.log("👇Background Image Feature👇");
+      console.log(
+        `%c👇 Background Image Feature 👇 %c${name}`,
+        headerTwoStyling,
+        "font-style: italic"
+      );
     } else if (name.includes("visual-story-gallery")) {
-      console.log("👇Visual Story Gallery👇");
+      console.log(
+        `%c👇 Visual Story Gallery 👇 %c${name}`,
+        headerTwoStyling,
+        "font-style: italic"
+      );
     } else if (name.includes("testimonial")) {
-      console.log("👇Testimonial👇");
+      console.log(
+        `%c👇 Testimonial 👇 %c${name}`,
+        headerTwoStyling,
+        "font-style: italic"
+      );
     } else {
-      console.log(`Didn't match a component: ${name}`);
+      console.log(
+        `%c👇 Didn't match a component 👇 : %c${name}`,
+        headerTwoStyling,
+        "font-style: italic"
+      );
     }
 
     console.log(
